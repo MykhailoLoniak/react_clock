@@ -6,6 +6,7 @@ type State = {
 
 type Props = {
   name: string;
+  updateClockName: () => void;
 };
 
 export class Clock extends React.Component<Props, State> {
@@ -13,10 +14,12 @@ export class Clock extends React.Component<Props, State> {
     today: new Date(),
   };
 
-  timerId = 0;
+  timerIdTodo = 0;
+
+  timerIdClock = 0;
 
   componentDidMount() {
-    this.timerId = window.setInterval(() => {
+    this.timerIdTodo = window.setInterval(() => {
       this.setState({
         today: new Date(),
       });
@@ -24,10 +27,15 @@ export class Clock extends React.Component<Props, State> {
       // eslint-disable-next-line no-console
       console.info(this.state.today.toUTCString().slice(-12, -4));
     }, 1000);
+
+    this.timerIdClock = window.setInterval(() => {
+      this.props.updateClockName();
+    }, 3300);
   }
 
   componentWillUnmount() {
-    window.clearInterval(this.timerId);
+    window.clearInterval(this.timerIdTodo);
+    window.clearInterval(this.timerIdClock);
   }
 
   render() {

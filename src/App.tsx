@@ -11,39 +11,37 @@ function getRandomName(): string {
 type State = {
   hasClock: boolean;
   clockName: string;
-  previousClockName: string;
 };
 
 export class App extends React.Component<{}, State> {
   state: State = {
     hasClock: true,
     clockName: 'Clock-0',
-    previousClockName: '',
   };
-
-  timerId = 0;
 
   componentDidMount(): void {
     document.addEventListener('contextmenu', (event: MouseEvent) => {
       event.preventDefault();
 
       this.setState({ hasClock: false });
-      clearInterval(this.timerId);
     });
-
-    this.timerId = window.setInterval(() => {
-      this.setState((prevState) => ({
-        clockName: getRandomName(),
-        previousClockName: prevState.clockName,
-      }));
-      // eslint-disable-next-line no-console
-      console.debug(`Renamed from ${this.state.previousClockName} to ${this.state.clockName}`);
-    }, 3300);
 
     document.addEventListener('click', () => {
       this.setState({ hasClock: true });
     });
   }
+
+  updateClockName = (): void => {
+    const prevClock = this.state.clockName;
+    const clock = getRandomName();
+
+    this.setState({
+      clockName: clock,
+    });
+
+    // eslint-disable-next-line no-console
+    console.debug(`Renamed from ${prevClock} to ${clock}`);
+  };
 
   render() {
     const { hasClock, clockName } = this.state;
@@ -51,7 +49,9 @@ export class App extends React.Component<{}, State> {
     return (
       <>
         <h1>React clock</h1>
-        {hasClock && <Clock name={clockName} />}
+        {hasClock && (
+          <Clock name={clockName} updateClockName={this.updateClockName} />
+        )}
       </>
     );
   }
