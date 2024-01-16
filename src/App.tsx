@@ -31,6 +31,10 @@ export class App extends React.Component<{}, State> {
       clearInterval(this.timerId);
     });
 
+    document.addEventListener('click', () => {
+      this.setState({ hasClock: true });
+    });
+
     this.timerId = window.setInterval(() => {
       this.setState((prevState) => ({
         clockName: getRandomName(),
@@ -39,10 +43,6 @@ export class App extends React.Component<{}, State> {
       // eslint-disable-next-line no-console
       console.debug(`Renamed from ${this.state.previousClockName} to ${this.state.clockName}`);
     }, 3300);
-
-    document.addEventListener('click', () => {
-      this.setState({ hasClock: true });
-    });
   }
 
   render() {
@@ -51,7 +51,7 @@ export class App extends React.Component<{}, State> {
     return (
       <>
         <h1>React clock</h1>
-        {hasClock && <Clock name={clockName} />}
+        {hasClock && <Clock name={clockName} timerClock={this.timerId} />}
       </>
     );
   }

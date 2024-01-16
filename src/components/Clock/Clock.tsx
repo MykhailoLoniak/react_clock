@@ -6,6 +6,7 @@ type State = {
 
 type Props = {
   name: string;
+  timerClock: number;
 };
 
 export class Clock extends React.Component<Props, State> {
@@ -28,6 +29,7 @@ export class Clock extends React.Component<Props, State> {
 
   componentWillUnmount() {
     window.clearInterval(this.timerId);
+    window.clearInterval(this.props.timerClock);
   }
 
   render() {
